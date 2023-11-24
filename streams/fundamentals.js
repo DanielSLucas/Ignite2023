@@ -1,7 +1,8 @@
+// usando o pipe para ligar uma stream de leitura em uma de saida
 // process.stdin
 //   .pipe(process.stdout)
 
-import { Readable } from 'node:stream'
+import { Readable, Transform, Writable } from 'node:stream'
 
 // Uma stream de leitura que retorna números de 1 até 100 de 1 em 1 segundo
 class OneToHundredStream extends Readable {
@@ -24,5 +25,23 @@ class OneToHundredStream extends Readable {
   }
 }
 
+// Stream de tranformação, que inverte o sinal do número que receber
+class InverseNumberStream extends Transform {
+  _transform(chunk, encoding, callback) {
+    const transformed = Number(chunk.toString()) * -1
+
+    callback(null, transformed.toString())
+  }
+}
+
+// Stream de escrita que log no console o número recebido multiplicado por 10
+class MultiplyByTenStream extends Writable {
+  _write(chunk, encoding, callback) {
+    console.log(Number(chunk.toString()) * 10)
+    callback()
+  }
+}
+
 new OneToHundredStream()
-  .pipe(process.stdout)
+  .pipe(new InverseNumberStream())
+  .pipe(new MultiplyByTenStream())
