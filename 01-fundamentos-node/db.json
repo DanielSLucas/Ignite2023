@@ -1,7 +1,12 @@
 {
   "users": [
     {
-      "id": "f98c0ae4-827b-4438-8bff-993e9ec28e69",
+      "id": "3423cd23-63ef-4765-9f62-ab45a0c3e1fa",
+      "name": "Daniel",
+      "email": "daniel@email.com"
+    },
+    {
+      "id": "3d40890a-6df4-44ed-a9d5-9f3e7cc52992",
       "name": "Daniel",
       "email": "daniel@email.com"
     }
