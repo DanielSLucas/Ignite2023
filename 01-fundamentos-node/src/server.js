@@ -1,7 +1,10 @@
 import http from 'node:http';
-import { json } from './middlewares/json.js';
+
 import { routes } from './routes.js';
+
+import { json } from './middlewares/json.js';
 import { routeParams } from './middlewares/route-params.js';
+import { queryParams } from './middlewares/query-params.js';
 
 const server = http.createServer(async (req, res) => {
   const { method, url } = req
@@ -13,6 +16,7 @@ const server = http.createServer(async (req, res) => {
   });
 
   if (route) {
+    queryParams(route)(req, res)
     routeParams(route)(req, res)
 
     return route.handler(req, res);
