@@ -1,12 +1,7 @@
 {
   "users": [
     {
-      "id": 1,
-      "name": "Daniel",
-      "email": "daniel@email.com"
-    },
-    {
-      "id": 1,
+      "id": "f98c0ae4-827b-4438-8bff-993e9ec28e69",
       "name": "Daniel",
       "email": "daniel@email.com"
     }
