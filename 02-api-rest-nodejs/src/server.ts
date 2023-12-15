@@ -1,8 +1,8 @@
-import 'dotenv/config'
 import fastify from 'fastify'
 import { knex } from './database'
+import { env } from './env'
 
-const PORT = Number(process.env.APP_PORT) || 3333
+const PORT = env.APP_PORT
 
 const app = fastify()
 
