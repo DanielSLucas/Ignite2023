@@ -6,9 +6,15 @@ const PORT = 3333
 const app = fastify()
 
 app.get('/hello', async () => {
-  const tables = await knex('sqlite_schema').select('*')
+  const transaction = await knex('transactions')
+    .insert({
+      id: crypto.randomUUID(),
+      title: 'Transação de teste',
+      amount: 1000,
+    })
+    .returning('*')
 
-  return tables
+  return transaction
 })
 
 app
