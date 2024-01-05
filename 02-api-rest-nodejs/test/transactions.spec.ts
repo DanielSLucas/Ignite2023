@@ -21,4 +21,30 @@ describe('Transactions routes', () => {
 
     expect(response.statusCode).toEqual(201)
   })
+
+  it('should be able to list all transactions', async () => {
+    const createaTransactionResponse = await request(app.server)
+      .post('/transactions')
+      .send({
+        title: 'New transaction',
+        amount: 5000,
+        type: 'credit',
+      })
+
+    const cookies = createaTransactionResponse.get('Set-Cookie')
+
+    const listTransactionsResponse = await request(app.server)
+      .get('/transactions')
+      .set('Cookie', cookies)
+      .expect(200)
+
+    expect(listTransactionsResponse.body).toEqual({
+      transactions: [
+        expect.objectContaining({
+          title: 'New transaction',
+          amount: 5000,
+        }),
+      ],
+    })
+  })
 })
