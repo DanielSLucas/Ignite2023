@@ -2,23 +2,26 @@ import { describe, expect, it } from 'vitest'
 import { compare } from 'bcryptjs'
 
 import { RegisterUseCase } from './register'
+import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository'
+import { UserAlreadyExistsError } from './errors/user-already-exists-error'
 
 describe('Register Use Case', () => {
-  it('should hash user password upon registration', async () => {
-    const registerUserCase = new RegisterUseCase({
-      async findByEmail(email) {
-        return null
-      },
-      async create(data) {
-        return {
-          id: 'user-1',
-          name: data.name,
-          email: data.email,
-          password_hash: data.password_hash,
-          created_at: new Date(),
-        }
-      },
+  it('should be able to register', async () => {
+    const usersRepository = new InMemoryUsersRepository()
+    const registerUserCase = new RegisterUseCase(usersRepository)
+
+    const { user } = await registerUserCase.execute({
+      name: 'John Doe',
+      email: 'johndoe@example.com',
+      password: '12345678',
     })
+
+    expect(user.id).toEqual(expect.any(String))
+  })
+
+  it('should hash user password upon registration', async () => {
+    const usersRepository = new InMemoryUsersRepository()
+    const registerUserCase = new RegisterUseCase(usersRepository)
 
     const { user } = await registerUserCase.execute({
       name: 'John Doe',
@@ -32,5 +35,26 @@ describe('Register Use Case', () => {
     )
 
     expect(isPasswordCorretlyHashed).toBe(true)
+  })
+
+  it('should no be able to register with same email twice', async () => {
+    const usersRepository = new InMemoryUsersRepository()
+    const registerUserCase = new RegisterUseCase(usersRepository)
+
+    const email = 'johndoe@example.com'
+
+    await registerUserCase.execute({
+      name: 'John Doe',
+      email,
+      password: '12345678',
+    })
+
+    expect(() =>
+      registerUserCase.execute({
+        name: 'John Doe',
+        email,
+        password: '12345678',
+      }),
+    ).rejects.toBeInstanceOf(UserAlreadyExistsError)
   })
 })
