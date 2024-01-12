@@ -49,7 +49,7 @@ describe('Register Use Case', () => {
       password: '12345678',
     })
 
-    expect(() =>
+    await expect(() =>
       registerUserCase.execute({
         name: 'John Doe',
         email,
