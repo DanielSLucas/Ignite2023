@@ -1,10 +1,16 @@
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
+
 import { AnswerQuestionUseCase } from './answer-question'
+import { AnswersRepository } from '../repositories/answers'
 
-test('create an answer', () => {
-  const answerQuestion = new AnswerQuestionUseCase()
+const fakeAnswersRespository: AnswersRepository = {
+  create: vi.fn()
+}
 
-  const answer = answerQuestion.execute({
+test('create an answer', async () => {
+  const answerQuestion = new AnswerQuestionUseCase(fakeAnswersRespository)
+
+  const answer = await answerQuestion.execute({
     content: 'Nova resposta',
     questionId: '1',
     instructorId: '1'
