@@ -21,7 +21,7 @@ describe('Get Question by slug', () => {
     const { question } = await sut.execute({ slug: 'example-question-title' })
 
     expect(question.id).toBeTruthy()
-    expect(question.title).toEqual('Example question title')
+    expect(question.title).toEqual(newQuestion.title)
   })
 
   it('should not be able to get a question by slug if not exists', async () => {
