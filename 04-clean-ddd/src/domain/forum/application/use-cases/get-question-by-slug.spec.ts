@@ -25,8 +25,8 @@ describe('Get Question by slug', () => {
   })
 
   it('should not be able to get a question by slug if not exists', async () => {
-    await expect(() => {
-      return sut.execute({ slug: 'non-existent-question-slug' })
-    }).rejects.toBeInstanceOf(Error)
+    await expect(() =>
+      sut.execute({ slug: 'non-existent-question-slug' }),
+    ).rejects.toBeInstanceOf(Error)
   })
 })
